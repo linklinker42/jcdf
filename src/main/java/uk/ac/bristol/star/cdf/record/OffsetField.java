@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 
 /**
  * Marks field members of {@link Record} subclasses which represent
- * absolute file offsets.  Fields marked with this annotation must also
+ * absolute file offsets. Fields marked with this annotation must also
  * be marked with {@link CdfField}, and must be of type
  * <code>Long</code> or <code>long[]</code>.
  *
- * @author   Mark Taylor
- * @since    26 Jun 2013
+ * @author Mark Taylor
+ * @since 26 Jun 2013
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

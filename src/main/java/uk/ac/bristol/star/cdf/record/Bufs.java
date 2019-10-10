@@ -17,11 +17,11 @@ import java.util.logging.Logger;
  */
 public class Bufs {
 
+  private static final Logger LOGGER = Logger.getLogger(Bufs.class.getName());
   /**
    * Preferred maximum size for a bank buffer.
    */
   private static final int BANK_SIZE = 1 << 30;
-  private static final Logger LOGGER = Logger.getLogger(Bufs.class.getName());
 
   /**
    * Private constructor prevents instantiation.
