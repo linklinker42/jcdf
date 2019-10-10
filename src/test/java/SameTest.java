@@ -44,7 +44,7 @@ public class SameTest {
   /*
    * Runs the comparisons.
    */
-  @Test
+//  @Test
   public void run() throws Exception {
     final CdfContent c0 = new CdfContent(new CdfReader(files_[0]));
     context_.clear();

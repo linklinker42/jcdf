@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
+import uk.ac.bristol.star.cdf.util.Utils;
 
 /**
  * Factory and utility methods for use with Bufs.
@@ -57,6 +60,23 @@ public class Bufs {
     return byteBuffers.length == 1
       ? createBuf(byteBuffers[0], isBit64, isBigendian)
       : BankBuf.createMultiBankBuf(byteBuffers, isBit64, isBigendian);
+  }
+
+  public static Buf createLargeBuf(final InputStream is, final int bufferSize, final boolean isBit64,
+    final boolean isBigendian) throws IOException {
+    byte[] b = new byte[bufferSize];
+    List<ByteBuffer> list = new ArrayList<>();
+    int read = is.read(b);
+    while (read != -1) {
+      ByteBuffer byteBuffer = Utils.toByteBuffer(b, read);
+      list.add(byteBuffer);
+      b = new byte[b.length];
+      read = is.read(b);
+    }
+
+    final ByteBuffer[] byteBufferArray = list.toArray(new ByteBuffer[0]);
+
+    return createBuf(byteBufferArray, isBit64, isBigendian);
   }
 
   /**

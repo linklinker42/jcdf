@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -204,12 +202,10 @@ public class TestTest {
     final GlobalAttribute gatt3 = gatts[3];
     assertEquals("TestDate", gatt3.getName());
     assertEquals("2002-04-25T00:00:00.000", epf
-      .formatEpoch(((Double) gatt3.getEntries()[1].getShapedValue())
-        .doubleValue()));
+      .formatEpoch(((Double) gatt3.getEntries()[1].getShapedValue())));
     assertEquals("2008-02-04T06:08:10.012014016", epf
       .formatTimeTt2000(((Long) gatt3.getEntries()[2]
-        .getShapedValue())
-        .longValue()));
+        .getShapedValue())));
     final double[] epDate = (double[]) gatts[4].getEntries()[0].getShapedValue();
     assertEquals("2004-05-13T15:08:11.022033044055", epf.formatEpoch16(epDate[0], epDate[1]));
 
@@ -305,51 +301,13 @@ public class TestTest {
   }
 
   @Test
-  public void test() throws Exception {
-    File f = new File("example1.cdf");
-    FileInputStream ifs = new FileInputStream(f);
-    byte[] b = new byte[1024];
-    List<ByteBuffer> list = new ArrayList<>();
-    int read = ifs.read(b);
-    while (read != -1) {
-      ByteBuffer byteBuffer = toByteBuffer(b, read);
-      list.add(byteBuffer);
-      b = new byte[b.length];
-      read = ifs.read(b);
+  public void testLargeBuf() throws Exception {
+    final File f = new File("example1.cdf");
+    try (FileInputStream ifs = new FileInputStream(f)) {
+      final Buf buf = Bufs.createLargeBuf(ifs, 1024, true, false);
+      CdfContent content = new CdfContent(new CdfReader(buf));
+      testExample1(content);
     }
-
-//    File f1 = new File("example1.cdf");
-//    byte[] f1Bytes = Files.readAllBytes(f1.toPath());
-//    ByteBuffer f1Buffer= ByteBuffer.wrap(f1Bytes);
-//    Buf f1Buf = Bufs.createBuf(f1Buffer, true, false);
-    byte[] testArr = combine(list);
-    ByteBuffer[] bufferArray = list.toArray(new ByteBuffer[0]);
-
-//    Buf buf = new BigBuf(bufferArray, true, false);
-//    Buf buf = Bufs.createBuf(ByteBuffer.wrap(testArr), true, false);
-    Buf buf = Bufs.createBuf(bufferArray, true, false);
-//    CdfContent content = new CdfContent(new CdfReader(f1Buf));
-    CdfContent content = new CdfContent(new CdfReader(buf));
-    testExample1(content);
-  }
-
-  public byte[] combine(final List<ByteBuffer> list) {
-    int length = 0;
-    for (ByteBuffer buffer : list) {
-      length += buffer.array().length;
-    }
-
-    final byte[] newArr = new byte[length];
-
-    int index = 0;
-    for (ByteBuffer buffer : list) {
-      for (byte b : buffer.array()) {
-        newArr[index] = b;
-        index++;
-      }
-    }
-
-    return newArr;
   }
 
   public ByteBuffer toByteBuffer(final byte[] b, final int len) {
