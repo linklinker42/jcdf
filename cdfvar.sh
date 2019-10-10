@@ -95,10 +95,14 @@ for cflags in \
   "-column -encoding ibmpc -compression vars:huff.0" \
   "$back_compat -compression vars:rle.0" \
   "-sparseness vars:srecords.no -compression cdf:ahuff.0 -checksum md5"
+  
+  
 do
-   count=`echo $count+1 | bc`
+   count=$((count + 1))
+   #count=`echo $count+1 | bc`
    outname="${baseout}_c${count}"
    cmd="cdfconvert -delete $cflags $basein $outname"
+   echo $cmd
    test $report -gt 0 && echo ${outname}.cdf
    if [ $create -gt 0 ]
    then

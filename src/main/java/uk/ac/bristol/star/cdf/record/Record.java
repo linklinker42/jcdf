@@ -105,7 +105,7 @@ public abstract class Record {
      * @param  fixedValue  value to compare against
      * @return   <code>actualValue</code>
      */
-    protected int checkIntValue( int actualValue, int fixedValue ) {
+    protected final int checkIntValue( int actualValue, int fixedValue ) {
         if ( actualValue != fixedValue ) {
             warnFormat( "Unexpected fixed value " + actualValue + " != "
                        + fixedValue );
@@ -122,7 +122,7 @@ public abstract class Record {
      *
      * @param   ptr   pointer notionally positioned at end of record
      */
-    protected void checkEndRecord( Pointer ptr ) {
+    protected final void checkEndRecord( Pointer ptr ) {
         long readCount = plan_.getReadCount( ptr );
         long recSize = getRecordSize();
         if ( readCount != recSize ) {
